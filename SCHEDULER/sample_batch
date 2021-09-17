@@ -1,0 +1,36 @@
+#!/bin/bash -l
+#SBATCH -N 2
+#SBATCH -J sample_run
+#SBATCH -p normal
+#SBATCH -t 5
+
+#######
+# The fist line of this file denotes that this is to be read as a bash script.
+# Line 2 tells sbatch to allocate 4 nodes for this job.
+# Line 3 is optional, and labels this job as 'sample_run' when displaying 
+#   the list of jobs in squeue.
+#######
+
+#######
+# The arguments for hydra:
+#     -np 4   (number of processes to execute)
+#     -ppn 1  (number of processes per node)
+# Therefore, given an sbatch allocation of 4 nodes, this command will 
+#   execute 1 process on each node. 
+#######
+
+source /opt/intel/oneapi/mpi/latest/env/vars.sh
+source /opt/intel/oneapi/compiler/latest/env/vars.sh
+mpiexec.hydra -n 2 -ppn 1 hostname
+
+# It is expected that the program is already compiled. If not then 
+#    compile on the head node with:
+#/usr/lib64/openmpi/bin/mpicc hello.c -o hello
+
+mpiexec.hydra -n 1 -ppn 1 ./hello
+mpiexec.hydra -n 4 -ppn 2 ./hello
+#mpiexec.hydra -n 4 -ppn 2 -iface ib0 ./hello
+
+
+# An alternate method is to use the native MPI launcher mpirun
+mpirun -n 4 -ppn 2 -iface ib0 -hosts clx1,clx2 ./hello
