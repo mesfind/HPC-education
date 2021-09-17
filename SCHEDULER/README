@@ -1,0 +1,38 @@
+
+
+################
+# Single Node 
+################
+
+
+   Simple job launch on one node:
+      $> srun hostname
+      $> srun <program>
+      $> srun -n 1 -w <node> <program>
+
+
+################
+# Multiple Nodes 
+################
+
+If executing on multiple nodes, a batch script is recommended. See the 
+sample batch script sample_run_script for more information. 
+
+   To submit a job, execute the sample script:
+      $> sbatch sample_run_script
+
+   To check the status of your job (note the job ID in the output):
+      $> squeue
+
+   Upon completion, the outpt will be in the local file ./slurm-<jobID>.out
+
+It is recommended to use the hydra process manager, as this works for multiple 
+versions of MPI, and SHMEM. Additionally, one could use mpirun or oshrun 
+for MPI and SHMEM respectively.
+
+
+Alternatively, jobs on specific nodes can be performed through the command 
+line with a comma-separate list of nodes:
+      $> srun -n 1 -w node2,node4 hostname
+
+
