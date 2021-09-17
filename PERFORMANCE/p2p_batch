@@ -1,0 +1,20 @@
+#!/bin/bash -l
+#SBATCH -N 2
+#SBATCH -J perf_test
+#SBATCH -p normal
+#SBATCH -t 5
+
+
+source /opt/intel/oneapi/mpi/latest/env/vars.sh
+#source /opt/intel/oneapi/compiler/latest/env/vars.sh
+mpiexec.hydra -n 2 -ppn 1 hostname
+
+#mpiexec.hydra -n 4 -ppn 2 -iface ib0 ./hello
+
+
+# An alternate method is to use the native MPI launcher mpirun
+#mpirun -n 2 /opt/intel/oneapi/mpi/2021.1.1/bin/IMB-P2P
+#mpirun -n 2 -iface ib0 IMB-P2P
+#mpirun -n 2 -iface eno1 IMB-P2P
+#mpiexec.hydra -n 2 -ppn 1 hostname
+mpirun -n 2 -mca btl self,openib IMB-P2P
