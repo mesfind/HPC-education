@@ -1,0 +1,2 @@
+Tutorials for GPU programming. All CUDA code is based on Nvidia Quadro p1000, while OpenCL is based on AMX Radeon WX 3100. 
+Information for GPU setup and driver installation can be found in the cluster_setup documentation at the top-level.
