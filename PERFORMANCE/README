@@ -1,2 +1,15 @@
-Applications, scripts, and documentation to perform various performance analysis - including interconnect, NUMA, and parallel programming. 
-GPU performance alaysis will be in the GPU folder for now. 
+
+Applications, scripts, and documentation to perform various performance analysis - 
+including interconnect, NUMA, and parallel programming. 
+
+GPU performance analysis will be in the GPU folder for now.
+
+All scripts in the PERFORMANCE folder are based on Intel OneAPI. 
+OneAPI installation:  
+
+   $> dnf config-manager --add-repo https://yum.repos.intel.com/oneapi
+   $> rpm --import https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+   $> dnf install intel-oneapi-mpi-devel
+
+Using the scripts in this directory requires sharing the Intel OneAPI folder 
+with compute nodes. Instructions for this can be found in the top-level setup script
