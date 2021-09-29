@@ -1,0 +1,49 @@
+
+
+
+################
+#   CPU
+################
+
+   Head node:  
+            Intel Xeon E-2146G
+            6 cores, 2 threads per core
+            16gb ECC memory
+
+   Compute nodes (2):
+            Dual Intel Xeon Silver 4210
+            20 cores, 2 threads per core
+            64gb ECC memory
+
+ 
+################
+#   GPU
+################
+
+            Nvidia Quadro P1000 (head node)
+            AMD Radeon WX 3100 (clx1)
+            Nvidia GTX 1050ti (clx2)
+
+   For additional gpu info, run GPU/OpenCL/devices.c
+
+################
+#  Interconnect
+################
+
+            1gb   Ethernet
+            40gb  Ethernet Intel XL710-QDA1
+            56gb  FDR-IB MCX353A-FCBT
+            100gb Omni-path 100HFA016
+
+################
+#  Provisioning
+################
+
+            xCAT cluster manager
+            Slurm resource manager
+            BMC-IMPI
+
+   For additional info - including parallel jobs tutorial - see SCHEDULER/README
+   
+   Configurations are subject to change.
+
