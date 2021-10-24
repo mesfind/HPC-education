@@ -10,11 +10,16 @@
             6 cores, 2 threads per core
             16gb ECC memory
 
-   Compute nodes (2):
+   CLX nodes (2):
             Dual Intel Xeon Silver 4210
             20 cores, 2 threads per core
             64gb ECC memory
 
+   NUC nodes (2):
+            NUC9i7QNX
+            Intel i7-9750H
+            6 cores, 2 threads per core
+            16gb non-ECC memory
  
 ################
 #   GPU
@@ -30,10 +35,11 @@
 #  Interconnect
 ################
 
-            1gb   Ethernet
-            40gb  Ethernet Intel XL710-QDA1
-            56gb  FDR-IB MCX353A-FCBT
-            100gb Omni-path 100HFA016
+            1gb   Ethernet                  (ALL)
+            40gb  Ethernet Intel XL710-QDA1 (CLX)
+            56gb  FDR-IB MCX353A-FCBT       (NUC)
+            100gb EDR-IB MCX455A            (CLX)
+            100gb Omni-path 100HFA016       (CLX)
 
 ################
 #  Provisioning
@@ -41,7 +47,7 @@
 
             xCAT cluster manager
             Slurm resource manager
-            BMC-IMPI
+            BMC-IMPI (head node, CLX)
 
    For additional info - including parallel jobs tutorial - see SCHEDULER/README
    
