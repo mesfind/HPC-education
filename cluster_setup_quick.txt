@@ -90,8 +90,8 @@ systemctl enable munge
 systemctl enable slurmctld
 systemctl restart munge
 systemctl restart slurmctld
-scontrol update nodename=s1 state=resume
-scontrol update nodename=s2 state=resume
+scontrol update nodename=c1 state=resume
+scontrol update nodename=c2 state=resume
 dnf -y install openmpi openmpi-devel gcc-c++
 dnf -y --installroot=$CHROOT install openmpi openmpi-devel gcc-c++
 packimage centos8-x86_64-netboot-compute
