@@ -1,6 +1,4 @@
 
-
-
 ################
 #   CPU
 ################
@@ -42,12 +40,22 @@
             100gb Omni-path 100HFA016       (CLX)
 
 ################
+#  NAS
+################
+
+            Intel i3-9100
+            4 cores, 1 thread per core
+            8gb ECC memory
+            Dual 1Gb ethernet
+            10Gb ethernet
+
+################
 #  Provisioning
 ################
 
             xCAT cluster manager
             Slurm resource manager
-            BMC-IMPI (head node, CLX)
+            BMC-IPMI (head node, CLX nodes)
 
    For additional info - including parallel jobs tutorial - see SCHEDULER/README
    
