@@ -2,9 +2,9 @@
 # Run these commands as root to build a simple head + 2 compute node setup 
 #    with nvidia gpu driver on the head node.
 # The only user requirement is entering the MAC address of the 2 compute nodes.
-# Note that some steps require a reboot, so this script cannot be executed as-is.
-
-
+# Instructions assume a clean CentOS8.3 installation, but are not unique to 
+#    the africa cluster(s)/equipment.
+# Note that some steps are for rebooting, so this script cannot be executed as-is.
 
 dnf -y update
 reboot
