@@ -1,2 +1,47 @@
 Tutorials for GPU programming. All CUDA code is based on Nvidia Quadro p1000, while OpenCL is based on AMX Radeon WX 3100. 
 Information for GPU setup and driver installation can be found in the cluster_setup documentation at the top-level.
+
+
+###############
+# GPU Info 
+###############
+
+
+   Nvidia Quadro P1000
+   Nvidia GTX 1050ti
+   AMD Radeon Pro WX3100
+
+For additional device info, run GPU/OpenCL/devices.c
+
+To compile and use the cuda and openCL code samples, ensure the CL libs are 
+in your environment:
+   $> export PATH=$PATH:/usr/local/cuda/bin
+   $> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+
+
+
+
+###############
+# CUDA 
+###############
+
+The cuda directory contains basic cuda tutorials, along with a subset 
+of sample code from the Nvidia cuda toolkit, chosen based on relevance 
+and ease of understanding. The full suite can be found in /usr/local/cuda/samples.
+
+To compile the cuda programs on your own, use the nvcc compiler and link 
+to the helper files:
+
+   $> nvcc <program>.cu -I/home/tutorial/GPU/CUDA/common/inc
+
+
+###############
+#  OpenCL
+###############
+
+The OCL directory contains sample code to demonstrate basic usage in both C 
+and C++.
+
+Additionally, some code may need to be compiled with the -lOpenCL flag.
+Example:
+      $> gcc deviceInfo.c -lOpenCL
