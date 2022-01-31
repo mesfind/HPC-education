@@ -8,7 +8,9 @@
 /*
  created by: Isayah Reed
  This program does 90 degree matrix rotations on GPU to demonstrate
-  cuda blocks. Each matrix is stored on separate cuda blocks as a 2D arrayi.
+  cuda blocks vs threads. Each matrix is stored on separate cuda blocks 
+  as a 2D array.
+ The rotation algorithm is different for CPU vs GPU, to help with validation.
 
  Before compiling this program, set the cuda library path. Example:
  $> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
@@ -47,7 +49,7 @@ __global__ void printMatrixGPU(int *matrix, const int count)
   {
     if(idx + blockIdx.x == 0)   printf("   Matrix %i:\n", count);
     __syncthreads();
-    if(blockIdx.x == x)//x)
+    if(blockIdx.x == x)
     {
       for(y=0; y<blockDim.x; y++)
       {
@@ -63,7 +65,6 @@ __global__ void printMatrixGPU(int *matrix, const int count)
 
 void rotateCPU(int ***matrix)
 {
-
   int temp=-1;
   // rotate along diagonal
   for(int x=0; x<NUM_MATRIX; x++)
@@ -94,7 +95,7 @@ __global__ void rotateGPU(int *matrix)
   idx += offset;
   int tmp = -1;
 
-  // trasnpose
+  // transpose
   if(idx % blockDim.x <= (int)ceil(((double)blockDim.x / 2.0)))
   {
     tmp = matrix[idx];
@@ -122,7 +123,7 @@ int main() {
   int ***matrix = new int**[NUM_MATRIX];
   int *dev_matrix;
 
-  // create NUM_MATRIX cuda blocks, each containing a 2D DIMDIM matrix
+  // create NUM_MATRIX cuda blocks, each containing a 2D DIMxDIM matrix
   dim3 numBlocks(NUM_MATRIX);
   dim3 threadsPerBlock(DIM,DIM);
 
@@ -168,20 +169,22 @@ int main() {
 
   cout<<"\nInitial matrices, GPU: "<<endl;
   // While we could just copy the matrix back to host then use printMatrixCPU,
-  //  the GPU version helps with visualizing the matrix layout across cuda blocks
+  //  the GPU printMatrix helps with visualizing the matrix layout across cuda blocks
   for(int i=0; i<NUM_MATRIX; i++)
     // Unlike cuda threads, the order of cuda block execution is not guaranteed.
     // Therefore, we launch a separate kernel for each block
     printMatrixGPU<<<1,threadsPerBlock>>>(&dev_matrix[i*DIM*DIM],i+1);
+  cudaDeviceSynchronize(); 
+ 
   // To demonstrate why we need to launch separate kernels for each cuda
-  //  block, uncomment the next line and run with NUM_MATRIX>1
+  //  block, uncomment the next 2 lines and run with NUM_MATRIX > 1
   //printMatrixGPU<<<numBlocks,threadsPerBlock>>>(dev_matrix);
-  cudaDeviceSynchronize();
+  //cudaDeviceSynchronize();
   
   cout<<"\nRotated matrices, GPU: "<<endl;
   rotateGPU<<<numBlocks,threadsPerBlock>>>(dev_matrix);
   cudaDeviceSynchronize();
-  // Let's do the alternate way of copy-back then printMatrixCPU
+  // Let's do the alternate way of host copy-back follwed by printMatrixCPU
   for(int x=0; x<NUM_MATRIX; x++)
     for(int y=0; y<DIM; y++)
         cudaMemcpy(matrix[x][y], &dev_matrix[(x*DIM*DIM)+(DIM*y)], DIM*sizeof(int), cudaMemcpyDeviceToHost);
