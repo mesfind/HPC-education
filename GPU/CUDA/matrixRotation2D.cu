@@ -42,12 +42,15 @@ void printMatrixCPU(int ***matrix)
 
 __global__ void printMatrixGPU(int *matrix, const int count)
 {
-  int idx = (blockIdx.x*blockDim.x*blockDim.x) + (blockDim.x * threadIdx.y + threadIdx.x);
+  int idx = blockDim.x * threadIdx.y + threadIdx.x;
+  int offset = blockIdx.x * blockDim.x * blockDim.x;
+  idx += offset;
   int x,y;
 
   for(x=0; x<gridDim.x; x++)
   {
-    if(idx + blockIdx.x == 0)   printf("   Matrix %i:\n", count);
+    if(idx + blockIdx.x == 0 && gridDim.x > 1)   printf("   Matrix %i:\n", x+1);
+    else if(idx + blockIdx.x == 0)   printf("   Matrix %i:\n", count);
     __syncthreads();
     if(blockIdx.x == x)
     {
@@ -178,7 +181,7 @@ int main() {
  
   // To demonstrate why we need to launch separate kernels for each cuda
   //  block, uncomment the next 2 lines and run with NUM_MATRIX > 1
-  //printMatrixGPU<<<numBlocks,threadsPerBlock>>>(dev_matrix);
+  //printMatrixGPU<<<numBlocks,threadsPerBlock>>>(dev_matrix,0);
   //cudaDeviceSynchronize();
   
   cout<<"\nRotated matrices, GPU: "<<endl;
