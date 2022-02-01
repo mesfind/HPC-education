@@ -62,6 +62,16 @@ void rotateCPU(int matrix[NUM_MATRIX][DIM][DIM])
         matrix[x][y][z] = matrix[x][z][y];
         matrix[x][y][DIM-z-1] = temp;
       }
+ 
+  // rotate along middle column
+  for(int x=0; x<NUM_MATRIX; x++)
+    for(int y=0; y<DIM; y++)
+      for(int z=0; z<DIM/2; z++)
+      {
+        temp = matrix[x][y][z];
+        matrix[x][y][z] = matrix[x][y][DIM-z-1];
+        matrix[x][y][DIM-z-1] = temp;
+      }
 }
 
 void printMatrix(int matrix[NUM_MATRIX][DIM][DIM])
