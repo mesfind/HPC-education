@@ -6,8 +6,11 @@
 
 /*
  created by: Isayah Reed
- This program give a exaple of a bubble sort algorithm on GPU. It is intended
-  to demonstrate GPU threads and how they differ from CPU.
+ This program gives an example of a bubble sort algorithm on GPU. It is intended
+  to demonstrate GPU threads and how they differ from CPU. Note that the sort 
+  algorithm is different between GPU and CPU, due to how GPU threads operate. 
+  Using the CPU algorithm on GPU would be ineffiecient, both in coding 
+  and performance.
 
  Before compiling this program, set the cuda library path. Example:
  $> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
@@ -79,7 +82,7 @@ int main() {
   cudaMalloc((void**)&dev_array, SIZE*sizeof(int));
 
   srand(SEED);
-  // If you dont cre about reproducing results, this line can be used instead
+  // Use this line if you dont care about reproducing results
   // srand(time(NULL));
 
   //Initialize array
