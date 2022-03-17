@@ -1,6 +1,8 @@
 # The CentOS decision to use stream releases in 2022 may affect some of the 
 # documentation in this repo. As such, instructions for CentOS 7 will be included. 
 # Most commands and instructions are easily transferrable between the 2 versions.
+# In theory, you could do a 'yum install dnf' then run the centOS8 setup instructions;
+#  some instructions would fail, but the overall setup should work.
 #
 # Run these commands as root to build a simple head + 2 compute node setup.
 # The only user requirement is entering the MAC address of the 2 compute nodes.
