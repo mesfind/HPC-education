@@ -1,0 +1,4 @@
+
+
+
+./install/configure --prefix=<where-you-want-to-install>/q-e-qe-6.4.1 CC=icc F77=ifort F90=ifort MPIF90=mpiifort CFLAGS="-O3" FFLAGS="-O3" FFT_LIBS="-L<fftw-location>/bin/fftw-3.3.8-ICC/lib -lfftw3f" --with-scalapack=intel
