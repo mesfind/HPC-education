@@ -1,4 +1,14 @@
 
+QE installation requires the Intel OneAPI C and FORTRAN compilers:
+   $> dnf config-manager --add-repo https://yum.repos.intel.com/oneapi
+   $> rpm --import https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+   $> dnf -y install intel-basekit intel-oneapi-compiler-fortran
 
 
-./install/configure --prefix=<where-you-want-to-install>/q-e-qe-6.4.1 CC=icc F77=ifort F90=ifort MPIF90=mpiifort CFLAGS="-O3" FFLAGS="-O3" FFT_LIBS="-L<fftw-location>/bin/fftw-3.3.8-ICC/lib -lfftw3f" --with-scalapack=intel
+Configuration for fftw v3.3.8:
+./configure --prefix=/opt/ohpc/pub/apps/fftw  CC=icx F77=ifx CFLAGS="-O3" FFLAGS="-O3 -xCORE-AVX2 -shared-intel -pthreads" --enable-single --enable-avx2
+
+
+Configuration for QE v6.4.1:
+./configure --prefix=/opt/ohpc/pub/apps/qe CC=icx F77=ifx F90=ifx MPIF90=mpiifort CFLAGS="-O3" FFLAGS="-O3 -xCORE-AVX2 -pthread" FFT_LIBS="-L/opt/ohpc/pub/apps/fftw/lib -lfftw3f" –with-scalapack=intel
+
