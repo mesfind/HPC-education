@@ -15,4 +15,10 @@ with compute nodes. Instructions for this can be found in interconnect_perf_vali
 
 Note that the 2022 switch to CentOS Stream affects some instructions for driver installation.
 For example, IFS for Omni-path driver installation works for CentOS8.3 but is not compatible with CentOS Stream. 
-The current recommendation is to use CentOS7 - preferrably v7.9
+There is a way to hack IFS for centOS stream. Add the following code to the top-level INSTALL script at line 388:
+
+        if ( "$CUR_VENDOR_VER" eq "ES" ) {
+                $CUR_VENDOR_VER="ES83";
+        }
+        
+This tricks the script into believing the installation is for centOS8.3 instead of the generic v8 that Stream shows.
