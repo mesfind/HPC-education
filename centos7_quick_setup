@@ -84,6 +84,16 @@ nodeset all osimage=centos7.9-x86_64-netboot-compute
 
 ### COMPUTE NODES ARE NOW READY FOR BOOT ###
 
+/bin/cp /etc/slurm/slurm.conf.example /etc/slurm/slurm.conf
+perl -pi -e "s/ControlMachine=\S+/ControlMachine=quartz/" /etc/slurm/slurm.conf
+perl -pi -e "s|ReturnToService=0|#ReturnToService=2|" /etc/slurm/slurm.conf
+perl -pi -e "s|PartitionName|#PartitionName|" /etc/slurm/slurm.conf
+echo PartitionName=normal Nodes=c1,c2 Default=YES MaxTime=2:00:00 MaxNodes=2 State=UP >> /etc/slurm/slurm.conf
+perl -pi -e "s|NodeName|#NodeName|" /etc/slurm/slurm.conf
+echo NodeName=c1 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> /etc/slurm/slurm.conf
+echo NodeName=c2 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> /etc/slurm/slurm.conf
+echo SlurmctldParameters=enable_configless >> /etc/slurm/slurm.conf
+
 systemctl enable munge
 systemctl enable slurmctld
 systemctl restart munge
