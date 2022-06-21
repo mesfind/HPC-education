@@ -6,11 +6,19 @@
 #    the africa cluster(s)/equipment.
 # Note that some steps are for rebooting, so this script cannot be executed as-is.
 
+
 dnf -y update
-reboot
+
+ ### Use the following 3 lines if installing after the transition to centOS stream releases   ###
+ # (if stream is used, then the previous update command would fail)
+#dnf install centos-release-stream
+#dnf --disablerepo '*' --enablerepo=extras swap centos-linux-repos centos-stream-repos
+#dnf distro-sync
 
 dnf -y --enablerepo=extras install epel-release
 dnf -y --enablerepo=baseos install kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+reboot
+
 dnf -y install http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
 dnf -y install wget
 wget -P /etc/yum.repos.d https://xcat.org/files/xcat/repos/yum/latest/xcat-core/xcat-core.repo
@@ -28,13 +36,17 @@ echo "allow all" >> /etc/chrony.conf
 systemctl restart chronyd
 dnf -y install ohpc-slurm-server
 chdef -t site dhcpinterfaces="xcatmn|eno1"
-wget http://isoredirect.centos.org/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-20220603-dvd1.iso
-copycds ./CentOS-Stream-8-x86_64-20220603-dvd1.iso
+wget http://centos.mirror.liquidtelecom.com/8.3.2011/isos/x86_64/CentOS-8.3.2011-x86_64-dvd1.iso
+copycds ./CentOS-8.3.2011-x86_64-dvd1.iso
 lsdef -t osimage
 export CHROOT=/install/netboot/centos8/x86_64/compute/rootimg/
 genimage centos8-x86_64-netboot-compute
 cp /etc/yum.repos.d/OpenHPC.repo $CHROOT/etc/yum.repos.d/
 cp /etc/yum.repos.d/epel.repo $CHROOT/etc/yum.repos.d/
+
+  ### Use this line for centOS stream
+#dnf --installroot=$CHROOT --disablerepo '*' --enablerepo=extras swap centos-linux-repos centos-stream-repos
+
 dnf -y --installroot=$CHROOT install ohpc-base-compute
 dnf -y --installroot=$CHROOT update
 chroot $CHROOT systemctl disable firewalld
@@ -43,7 +55,7 @@ dnf -y --installroot=$CHROOT install ohpc-slurm-client
 echo SLURMD_OPTIONS="--conf-server 10.10.1.10" > $CHROOT/etc/sysconfig/slurmd
 dnf -y --installroot=$CHROOT install chrony
 echo "server 10.10.1.10" >> $CHROOT/etc/chrony.conf
-dnf -y --installroot=$CHROOT install kernel-`uname -r`
+dnf -y --installroot=$CHROOT install kernel-`uname -r` hwloc-libs
 genimage centos8-x86_64-netboot-compute -k `uname -r`
 dnf config-manager --installroot=$CHROOT --enable baseos
 dnf -y --installroot=$CHROOT install --enablerepo=powertools lmod-ohpc
@@ -85,6 +97,19 @@ packimage centos8-x86_64-netboot-compute
 nodeset all osimage=centos8-x86_64-netboot-compute
 
 ### COMPUTE NODES ARE NOW READY FOR BOOT ###
+
+cp /etc/slurm/slurm.conf.example /etc/slurm/slurm.conf
+perl -pi -e "s/ControlMachine=\S+/ControlMachine=quartz/" /etc/slurm/slurm.conf
+perl -pi -e "s|ReturnToService=0|#ReturnToService=2|" /etc/slurm/slurm.conf
+perl -pi -e "s|PartitionName|#PartitionName|" /etc/slurm/slurm.conf
+echo PartitionName=normal Nodes=c1,c2 Default=YES MaxTime=2:00:00 MaxNodes=2 State=UP >> \
+  /etc/slurm/slurm.conf
+perl -pi -e "s|NodeName|#NodeName|" /etc/slurm/slurm.conf
+echo NodeName=c1 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+  /etc/slurm/slurm.conf
+echo NodeName=c2 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+  /etc/slurm/slurm.conf
+echo SlurmctldParameters=enable_configless >> /etc/slurm/slurm.conf
 
 systemctl enable munge
 systemctl enable slurmctld
