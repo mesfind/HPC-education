@@ -191,6 +191,10 @@ shared-network enp2s0f1 {
   } # 10.10.0.0/255.255.0.0 subnet_end
 } # enp2s0f1 nic_end
 
+# Routing table update
+route -n 
+route del -net 10.10.0.0 gw 0.0.0.0 netmask 255.255.0.0 dev enp2s0f1  # if local connection is found in the table
+
 
 
 ### GPU DRIVER AND CUDA INSTALLATION ###
