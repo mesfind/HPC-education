@@ -137,7 +137,7 @@ echo NodeName=node8 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >>
 echo NodeName=node9 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
 
-
+# update the states of all computing nodes
 systemctl enable munge
 systemctl enable slurmctld
 systemctl restart munge
