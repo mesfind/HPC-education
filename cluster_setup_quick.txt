@@ -54,13 +54,13 @@ chroot $CHROOT systemctl disable firewalld
 dnf -y --installroot=$CHROOT install ohpc-slurm-client
 echo SLURMD_OPTIONS="--conf-server 10.10.1.10" > $CHROOT/etc/sysconfig/slurmd
 dnf -y --installroot=$CHROOT install chrony
-echo "server 10.10.1.10" >> $CHROOT/etc/chrony.conf
+echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 dnf -y --installroot=$CHROOT install kernel-`uname -r` hwloc-libs
 genimage centos8-x86_64-netboot-compute -k `uname -r`
 dnf config-manager --installroot=$CHROOT --enable baseos
 dnf -y --installroot=$CHROOT install --enablerepo=powertools lmod-ohpc
-echo "10.10.1.10:/home /home nfs nfsvers=3,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
-echo "10.10.1.10:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
+echo "10.10.0.1:/home /home nfs nfsvers=3,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
+echo "10.10.0.1:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
 perl -pi -e "s|/tftpboot|#/tftpboot|" /etc/exports
 perl -pi -e "s|/install|#/install|" /etc/exports
 echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
@@ -68,9 +68,9 @@ echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 exportfs -a
 systemctl restart nfs-server
 systemctl enable nfs-server
-echo "server 10.10.1.10" >> $CHROOT/etc/chrony.conf
+echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 chroot $CHROOT systemctl enable chronyd
-echo "server 10.10.1.10" >> $CHROOT/etc/chrony.conf
+echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 echo "account required pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 mkdir -p /install/custom/netboot
 chdef -t osimage -o centos8-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
@@ -83,12 +83,20 @@ echo "/etc/hosts -> /etc/hosts " >> /install/custom/netboot/compute.synclist
 chroot $CHROOT systemctl enable slurmd
 chroot $CHROOT systemctl enable munge
 chdef -t site domain=aau
-chdef -t network net1 net=10.10.1.0 mask=255.0.0.0 gateway=10.10.1.1
+chdef -t network net1 net=10.10.1.0 mask=255.255.0.0 gateway=10.10.1.1
 
-mkdef -t node c1 groups=compute,all ip=10.10.1.21 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
-mkdef -t node c2 groups=compute,all ip=10.10.1.22 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node1 groups=compute,all ip=10.10.1.11 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node2 groups=compute,all ip=10.10.1.12 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node3 groups=compute,all ip=10.10.1.13 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node4 groups=compute,all ip=10.10.1.14 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node5 groups=compute,all ip=10.10.1.15 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node6 groups=compute,all ip=10.10.1.16 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node7 groups=compute,all ip=10.10.1.17 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node8 groups=compute,all ip=10.10.1.18 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
+mkdef -t node node9 groups=compute,all ip=10.10.1.19 mac=<MAC_ADDRESS> netboot=xnba arch=x86_64
 
-echo 10.10.1.10 quartz quartz.aau >> /etc/hosts
+
+echo 10.10.0.10 entoto entoto.aau >> /etc/hosts
 makehosts
 makenetworks
 makedhcp -n
@@ -115,12 +123,29 @@ systemctl enable munge
 systemctl enable slurmctld
 systemctl restart munge
 systemctl restart slurmctld
-scontrol update nodename=c1 state=resume
-scontrol update nodename=c2 state=resume
+scontrol update nodename=node1 state=resume
+scontrol update nodename=node2 state=resume
+scontrol update nodename=node3 state=resume
+scontrol update nodename=node4 state=resume
+scontrol update nodename=node5 state=resume
+scontrol update nodename=node6 state=resume
+scontrol update nodename=node7 state=resume
+scontrol update nodename=node8 state=resume
+scontrol update nodename=node9 state=resume
+
 dnf -y install openmpi openmpi-devel gcc-c++
 dnf -y --installroot=$CHROOT install openmpi openmpi-devel gcc-c++
+
+# Pack Diskless Image
 packimage centos8-x86_64-netboot-compute
-pdsh -w c[1-2] reboot
+
+# Parallel Reboot all node(1-9)
+pdsh -w node[1-9] reboot
+
+
+# DHPC configuration
+
+
 
 ### GPU DRIVER AND CUDA INSTALLATION ###
 dnf clean all
