@@ -145,8 +145,6 @@ pdsh -w node[1-9] reboot
 
 # DHPC configuration
 
-#xCAT generated dhcp configuration 
-
 shared-network enp2s0f1 {
   subnet 10.10.0.0 netmask 255.255.0.0 {
     authoritative;
