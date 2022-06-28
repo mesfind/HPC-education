@@ -114,27 +114,30 @@ cp /etc/slurm/slurm.conf.example /etc/slurm/slurm.conf
 perl -pi -e "s/ControlMachine=\S+/ControlMachine=quartz/" /etc/slurm/slurm.conf
 perl -pi -e "s|ReturnToService=0|#ReturnToService=2|" /etc/slurm/slurm.conf
 perl -pi -e "s|PartitionName|#PartitionName|" /etc/slurm/slurm.conf
+
+#lscpu to list number of socker,corePerSocket and ThreadsPerCore
+
 echo PartitionName=normal Nodes=node1,node2,node3,node4, node5, node6,node7,node8,node9 Default=YES MaxTime=48:00:00 MaxNodes=2 State=UP >> \
   /etc/slurm/slurm.conf
 perl -pi -e "s|NodeName|#NodeName|" /etc/slurm/slurm.conf
 
-echo NodeName=node1 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node1 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node2 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node2 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node3 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node3 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node4 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node4 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node5 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node5 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node6 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node6 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node7 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node7 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node8 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node8 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
-echo NodeName=node9 Sockets=1 CoresPerSocket=2 ThreadsPerCore=2 State=UNKNOWN >> \
+echo NodeName=node9 Sockets=4 CoresPerSocket=6 ThreadsPerCore=2 State=UNKNOWN >> \
   /etc/slurm/slurm.conf
 
 # update the states of all computing nodes
