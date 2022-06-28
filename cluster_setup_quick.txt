@@ -240,3 +240,20 @@ module use /opt/ohpc/pub/moduledeps/gnu8/
 module use /opt/ohpc/pub/moduledeps/gnu8-openmpi3/
 
 source /root/.bashrc
+
+
+# swap b/n mpich openmpi
+
+dnf module swap mpich openmpi4/4.1.1
+
+# install fftw
+
+dnf install -y fftw-gnu9-openmpi4-ohpc.x86_64
+
+# add module 
+
+module add fftw/3.3.8
+
+# save the modul as default
+
+ml save
