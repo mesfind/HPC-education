@@ -254,6 +254,19 @@ dnf install -y fftw-gnu9-openmpi4-ohpc.x86_64
 
 module add fftw/3.3.8
 
+# load module dependecies
+
+module spider fftw/3.3.8
+
+
+
+
+module load  gnu9/9.4.0  openmpi4/4.1.1
+
+# load fftw/3.3.8 
+
+ module load fftw/3.3.8
+
 # save the modul as default
 
 ml save
