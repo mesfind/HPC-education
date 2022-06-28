@@ -270,3 +270,15 @@ module load  gnu9/9.4.0  openmpi4/4.1.1
 # save the modul as default
 
 ml save
+
+# install hdf5
+dnf install -y hdf5-gnu9-ohpc
+
+## add to env module(install version)
+
+module add ml add hdf5/1.10.8
+
+## save as default
+ml save
+
+
