@@ -282,3 +282,12 @@ module add ml add hdf5/1.10.8
 ml save
 
 
+# Install R
+
+dnf install -y R-gnu9-ohpc 
+
+## add the R to env module
+
+ module add R/4.1.2
+ 
+ 
