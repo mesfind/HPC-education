@@ -53,6 +53,8 @@ chroot $CHROOT systemctl disable firewalld
 /bin/cp -f /etc/passwd /etc/group $CHROOT/etc
 dnf -y --installroot=$CHROOT install ohpc-slurm-client
 echo SLURMD_OPTIONS="--conf-server 10.10.1.10" > $CHROOT/etc/sysconfig/slurmd
+
+dfn -y --installroot=$CHROOT install ntp
 dnf -y --installroot=$CHROOT install chrony
 echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 dnf -y --installroot=$CHROOT install kernel-`uname -r` hwloc-libs
