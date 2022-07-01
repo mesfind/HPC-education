@@ -54,3 +54,24 @@ route -n
 route del -net 10.10.0.0 gw 0.0.0.0 netmask 255.255.0.0 dev enp2s0f1  # if local connection is found in the table
 ```
 
+
+
+# Easybuild 
+dnf search EasyBuild
+
+dnf install -y EasyBuild-ohpc.x86_64
+
+export EASYBUILD_PREFIX=/opt/ohpc/pub/apps
+export EASYBUILD_MODULES_TOOL=Lmod
+
+ml load EasyBuild
+
+eb -S QuantumESPRESSO
+eb QuantumESPRESSO-6.8-intel-2021a.eb -r
+
+
+
+ml load EasyBuild
+
+
+
