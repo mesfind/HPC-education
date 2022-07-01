@@ -64,7 +64,10 @@ dnf install -y EasyBuild-ohpc.x86_64
 export EASYBUILD_PREFIX=/opt/ohpc/pub/apps
 export EASYBUILD_MODULES_TOOL=Lmod
 
+chmod -R 777 $EASYBUILD_PREFIX
+module use $EASYBUILD_PREFIX/modules/all
 ml load EasyBuild
+
 
 eb -S QuantumESPRESSO
 eb QuantumESPRESSO-6.8-intel-2021a.eb -r
