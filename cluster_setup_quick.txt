@@ -212,8 +212,8 @@ dnf -y install cuda-11-2
 #Modify the /root/.bashrc file.
 
 module use /opt/ohpc/pub/modulefiles/
-module use /opt/ohpc/pub/moduledeps/gnu8/
-module use /opt/ohpc/pub/moduledeps/gnu8-openmpi3/
+module use /opt/ohpc/pub/moduledeps/gnu9/
+module use /opt/ohpc/pub/moduledeps/gnu9-openmpi4/
 
 source /root/.bashrc
 
