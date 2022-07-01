@@ -2,7 +2,7 @@
 
 
 # DHPC configuration
-
+```
 shared-network enp2s0f1 {
   subnet 10.10.0.0 netmask 255.255.0.0 {
     authoritative;
@@ -52,5 +52,5 @@ shared-network enp2s0f1 {
 # Routing table update
 route -n 
 route del -net 10.10.0.0 gw 0.0.0.0 netmask 255.255.0.0 dev enp2s0f1  # if local connection is found in the table
-
+```
 
