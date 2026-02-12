@@ -36,8 +36,8 @@ echo "allow all" >> /etc/chrony.conf
 systemctl restart chronyd
 dnf -y install ohpc-slurm-server
 chdef -t site dhcpinterfaces="xcatmn|eno1"
-wget http://www.ftp.saix.net/linux/distributions/centos/8-stream/isos/x86_64/CentOS-Stream-8-x86_64-latest-dvd1.iso
-copycds ./CentOS-Stream-8-x86_64-latest-dvd1.iso
+wget https://mirror.cs.princeton.edu/pub/mirrors/centos/8-stream/isos/x86_64/CentOS-Stream-8-20240506.0-x86_64-dvd1.iso
+copycds ./CentOS-Stream-8-20240506.0-x86_64-dvd1.iso
 lsdef -t osimage
 export CHROOT=/install/netboot/centos8/x86_64/compute/rootimg/
 genimage centos8-x86_64-netboot-compute
