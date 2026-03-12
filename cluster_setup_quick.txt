@@ -60,6 +60,20 @@ echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 dnf -y --installroot=$CHROOT install kernel-`uname -r` hwloc-libs
 genimage centos8-x86_64-netboot-compute -k `uname -r`
 dnf config-manager --installroot=$CHROOT --enable baseos
+
+cat > $CHROOT/etc/yum.repos.d/CentOS-Linux-PowerTools.repo << 'EOF'
+[CentOS-Linux-PowerTools]
+name=CentOS Linux 8 - PowerTools
+baseurl=http://vault.centos.org/8.5.2111/PowerTools/x86_64/os/
+gpgcheck=1
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+EOF
+
+# Clean and update metadata
+dnf --installroot=$CHROOT clean all
+dnf -y --installroot=$CHROOT makecache
+
 dnf -y --installroot=$CHROOT install --enablerepo=powertools lmod-ohpc
 
 # Create NFS Cilent(by mount /home and /opt/ohpc/pub from master node)
