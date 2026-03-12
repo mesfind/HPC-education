@@ -60,19 +60,24 @@ echo "server 10.10.0.1" >> $CHROOT/etc/chrony.conf
 dnf -y --installroot=$CHROOT install kernel-`uname -r` hwloc-libs
 genimage centos8-x86_64-netboot-compute -k `uname -r`
 dnf config-manager --installroot=$CHROOT --enable baseos
+CHROOT="/install/netboot/centos8/x86_64/compute/rootimg"
 
-cat > $CHROOT/etc/yum.repos.d/CentOS-Linux-PowerTools.repo << 'EOF'
-[CentOS-Linux-PowerTools]
-name=CentOS Linux 8 - PowerTools
-baseurl=http://vault.centos.org/8.5.2111/PowerTools/x86_64/os/
-gpgcheck=1
-enabled=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
-EOF
+# 1. Use correct repo name + releasever
+dnf -y --releasever=8 --installroot=$CHROOT --enablerepo="CentOS-Linux-PowerTools" install lmod-ohpc
 
-# Clean and update metadata
-dnf --installroot=$CHROOT clean all
-dnf -y --installroot=$CHROOT makecache
+# IF that fails, install from BaseOS/AppStream only (lmod-ohpc might be there):
+dnf -y --releasever=8 --installroot=$CHROOT install lmod-ohpc
+
+# 2. Skip lmod-ohpc if not critical - your HPC setup works without it
+# Core OHPC (Slurm, etc.) doesn't strictly require it for basic compute
+
+# 3. Skip genimage for now - focus on working chroot first
+# Your kernel/boot/chrony are already installed from earlier steps
+
+# 4. Verify what you HAVE:
+rpm -qa --root=$CHROOT | grep -E "(chrony|hwloc|kernel)"
+ls $CHROOT/boot/vmlinuz* $CHROOT/lib/modules/
+
 
 dnf -y --installroot=$CHROOT install --enablerepo=powertools lmod-ohpc
 
