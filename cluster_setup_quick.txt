@@ -46,7 +46,7 @@ cp /etc/yum.repos.d/epel.repo $CHROOT/etc/yum.repos.d/
 
   ### Use this line for centOS stream
 #dnf --installroot=$CHROOT --disablerepo '*' --enablerepo=extras swap centos-linux-repos centos-stream-repos
-
+dnf -y --installroot=$CHROOT install slurm-slurmd
 dnf -y --installroot=$CHROOT install ohpc-base-compute
 dnf -y --installroot=$CHROOT update
 chroot $CHROOT systemctl disable firewalld
